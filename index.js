@@ -8,12 +8,12 @@ import moment from "moment";
 import multer from "multer";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-
+let app = express();
 import router from "./routers/main.router.js";
 
 connect("mongodb://localhost/farma", { useNewUrlParser:true, useUnifiedTopology:true });
 
-let app = express();
+
 
 app.set("view engine", "ejs");
 app.set("port", 4000);

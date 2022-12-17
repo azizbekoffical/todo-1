@@ -29,7 +29,7 @@ class Main {
         let drug = await Count.findById(id);
 
         if (drug) {
-            return res.render("main/drug", [drug] );
+            return res.render("main/drug", {drug} );
         }
 
         return res.json("Error 500");
@@ -113,18 +113,6 @@ class Main {
         res.json({ msg: 'success', count, updatedMoment });
     }
 
-    async search(req, res) {
-        let drug = req.body.searchedDrug;
-
-        let result = await Count.find({ name:drug });
-
-        if (result.length !== 0) {
-            res.render("main/searchResult", { title:"Results", data:result });
-        } else {
-            res.render("main/searchResult", { title:"Results", data:"Drug not find" });
-        }
-    }
-
     async deleteDrug(req, res) {
         let id = req.params.id;
 
@@ -145,6 +133,19 @@ class Main {
             return res.redirect("/");
         } else {
             next();
+        }
+    }
+    async search(req, res) {
+        let drug = req.body.searchedDrug;
+
+        let regexForName = new RegExp(drug, "i");
+
+        let result = await Count.find({ name: { $regex:regexForName }});
+
+        if (result.length !== 0) {
+            res.render("main/search", { title:"Results", data:result });
+        } else {
+            res.render("main/search", { title:"Results", data:"Drug not find" });
         }
     }
 }
